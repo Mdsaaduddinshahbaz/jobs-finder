@@ -164,3 +164,12 @@ tbody tr:hover { background: var(--surface-2); }
 .leaflet-tile-pane {
   filter: invert(1) hue-rotate(200deg) brightness(.9) contrast(.95) saturate(.7);
 }
+
+/* ---------- live-location buttons ---------- */
+.locate-btn { width: 100%; margin-bottom: .8rem; }
+.locate-btn:disabled { opacity: .6; cursor: progress; transform: none; }
+.locate-fab {
+  width: 42px; height: 42px; padding: 0; margin: 0 10px 28px 0; font-size: 20px; line-height: 1;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow);
+}
+.locate-fab:hover { background: var(--surface-2); }

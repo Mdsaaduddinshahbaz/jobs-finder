@@ -131,15 +131,57 @@ async function showJobs(placeId, li) {
 
 radiusEl.addEventListener("change", loadPlaces);
 
-if ("geolocation" in navigator) {
+// ---------- live location ----------
+const LABEL = "📍 Use my live location";
+function setLocating(on) {
+  document.querySelectorAll(".locate-btn").forEach((b) => {
+    b.disabled = on;
+    if (b.id === "locateBtn") b.textContent = on ? "Locating…" : LABEL;
+  });
+}
+
+// can be called any time – at startup and whenever the user wants to come back to where they really are
+function locateMe() {
+  if (!("geolocation" in navigator)) {
+    if (!userMarker) setUser(DEFAULT_POS[0], DEFAULT_POS[1], "Geolocation not supported – click the map to set where you are");
+    else statusEl.textContent = "Geolocation is not supported in this browser";
+    return;
+  }
+  setLocating(true);
   navigator.geolocation.getCurrentPosition(
     (pos) => {
+      setLocating(false);
       map.setView([pos.coords.latitude, pos.coords.longitude], 15);
-      setUser(pos.coords.latitude, pos.coords.longitude, "Showing jobs near your current location (click the map to move)");
+      setUser(pos.coords.latitude, pos.coords.longitude, "Showing jobs near your live location (click the map to move)");
     },
-    () => setUser(DEFAULT_POS[0], DEFAULT_POS[1], "Location blocked – click the map to set where you are"),
-    { enableHighAccuracy: true, timeout: 8000 }
+    (err) => {
+      setLocating(false);
+      const msg = err.code === 1
+        ? "Location permission denied – allow it in your browser's site settings and try again"
+        : "Couldn't get your live location – please try again";
+      if (!userMarker) setUser(DEFAULT_POS[0], DEFAULT_POS[1], msg + ". Click the map to set where you are.");
+      else statusEl.textContent = msg;
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
   );
-} else {
-  setUser(DEFAULT_POS[0], DEFAULT_POS[1], "Geolocation not supported – click the map to set where you are");
 }
+
+// sidebar button
+document.getElementById("locateBtn").addEventListener("click", locateMe);
+
+// floating button on the map (handy on phones where the map is on top)
+const LocateControl = L.Control.extend({
+  options: { position: "bottomright" },
+  onAdd() {
+    const b = L.DomUtil.create("button", "locate-btn locate-fab");
+    b.type = "button";
+    b.title = "Go to my live location";
+    b.textContent = "🎯";
+    L.DomEvent.disableClickPropagation(b);
+    b.addEventListener("click", locateMe);
+    return b;
+  },
+});
+map.addControl(new LocateControl());
+
+locateMe();
