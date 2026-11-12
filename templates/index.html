@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jobs Near Me</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <h1>📍 Jobs Near Me</h1>
+    <a class="link" href="{{ url_for('login') }}">Admin</a>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <div id="status" class="status">Finding your location…</div>
+      <label class="radius">Radius
+        <select id="radius">
+          <option value="1">1 km</option>
+          <option value="5">5 km</option>
+          <option value="10" selected>10 km</option>
+          <option value="25">25 km</option>
+          <option value="100">100 km</option>
+        </select>
+      </label>
+      <h2>Nearby employers</h2>
+      <ul id="placeList" class="list"></ul>
+      <div id="jobsPanel" class="jobs-panel hidden"></div>
+    </aside>
+    <div id="map"></div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

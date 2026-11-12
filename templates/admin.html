@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin – Upload Jobs</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <h1>🛠 Admin – Upload Jobs</h1>
+    <span>
+      <a class="link" href="{{ url_for('index') }}">View site</a> ·
+      <a class="link" href="{{ url_for('logout') }}">Log out</a>
+    </span>
+  </header>
+
+  <main class="admin-layout">
+    <section class="card">
+      <h2>1. Select the place</h2>
+      <div class="search-row">
+        <input id="searchBox" placeholder="Search a building / place (e.g. Deloitte Hyderabad)">
+        <button id="searchBtn" type="button">Search</button>
+      </div>
+      <div id="searchResults" class="results"></div>
+      <p class="hint">…or just click anywhere on the map to drop a pin.</p>
+      <div id="adminMap"></div>
+    </section>
+
+    <section class="card">
+      <h2>2. Add the job</h2>
+      <form id="jobForm">
+        <label>Place / company name <input id="placeName" required placeholder="Deloitte"></label>
+        <label>Coordinates <input id="coords" readonly placeholder="Pick a place on the map"></label>
+        <label>Job title <input id="title" required placeholder="Software Engineer"></label>
+        <label>Description <textarea id="description" rows="3"></textarea></label>
+        <label>Apply link (optional) <input id="applyLink" type="url" placeholder="https://…"></label>
+        <button type="submit">Upload job</button>
+        <p id="formMsg" class="hint"></p>
+      </form>
+    </section>
+
+    <section class="card wide">
+      <h2>All uploaded jobs</h2>
+      <table>
+        <thead><tr><th>Place</th><th>Title</th><th>Location</th><th></th></tr></thead>
+        <tbody id="jobRows"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="{{ url_for('static', filename='admin.js') }}"></script>
+</body>
+</html>
